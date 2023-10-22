@@ -21,7 +21,7 @@ public class AlbumPhoto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private char[] photoBytes;
+    private char[] fileContent;
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50)")
     private String contentType;
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50)")

@@ -20,7 +20,7 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
     @Column(unique = true, nullable = false, length = 50, columnDefinition = "VARCHAR(50)")
     private String title;

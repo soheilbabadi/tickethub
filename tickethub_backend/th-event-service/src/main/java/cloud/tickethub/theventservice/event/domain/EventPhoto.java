@@ -22,10 +22,9 @@ public class EventPhoto implements Serializable {
     private static final long serialVersionUID = -747711197555455354L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
 
-    private char[] photoBytes;
+    private byte[] fileContent;
 
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50)")
     private String contentType;
