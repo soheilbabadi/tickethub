@@ -7,6 +7,9 @@ import cloud.tickethub.theventservice.event.infra.CategoryRepo;
 import cloud.tickethub.theventservice.event.infra.EventRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,12 +24,15 @@ public class EventServiceImpl {
     @Autowired
     private CategoryRepo categoryRepo;
 
+    @Cacheable(value = "events")
     public List<EventDto> findAll(EventFilterDto dto) {
         return convertToDto(findAllByFilter(dto));
     }
-    public EventDto addEvent(EventDto dto){
+
+    @CachePut(value = "events")
+    public EventDto addEvent(EventDto dto) {
         Event event = new Event();
-        var category=categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Event not found"));
+        var category = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Event not found"));
         BeanUtils.copyProperties(dto, event);
         event.setCategory(category);
         eventRepo.save(event);
@@ -34,9 +40,34 @@ public class EventServiceImpl {
         return dto;
     }
 
+    public EventDto updateEvent(EventDto dto) {
+        var event = eventRepo.findById(dto.getId()).orElseThrow(() -> new RuntimeException("Event not found"));
+        var category = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Event not found"));
+        BeanUtils.copyProperties(dto, event);
+        event.setCategory(category);
+        eventRepo.save(event);
+        BeanUtils.copyProperties(event, dto);
+        return dto;
+    }
+
+    public EventDto getEvent(long id) {
+        var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+        var dto = new EventDto();
+        BeanUtils.copyProperties(event, dto);
+        dto.setCategoryId(event.getCategory().getId());
+        dto.setCategory(event.getCategory().getTitle());
+        return dto;
+    }
+
+    @CacheEvict(value = "events", allEntries = true)
+    public void deleteEvent(long id) {
+        var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+        eventRepo.delete(event);
+    }
+
     private List<Event> findAllByFilter(EventFilterDto dto) {
 
-        List<Event> list = eventRepo.findAllByActive(true);
+        List<Event> list = eventRepo.findAll();
 
         if (dto.getTitle() != null)
             list = list.stream().filter(event -> event.getTitle().contains(dto.getTitle())).toList();
@@ -77,4 +108,6 @@ public class EventServiceImpl {
             return dto;
         }).toList();
     }
+
+
 }

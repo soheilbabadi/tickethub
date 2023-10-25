@@ -1,0 +1,1 @@
+ docker run -p 16379:6379 -d docker.arvancloud.ir/redis --requirepass "admin" redis-service

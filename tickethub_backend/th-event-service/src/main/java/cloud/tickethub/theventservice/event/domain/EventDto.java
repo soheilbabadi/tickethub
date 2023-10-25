@@ -1,6 +1,5 @@
 package cloud.tickethub.theventservice.event.domain;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Builder
-@Entity
 public class EventDto implements Serializable {
 
 
