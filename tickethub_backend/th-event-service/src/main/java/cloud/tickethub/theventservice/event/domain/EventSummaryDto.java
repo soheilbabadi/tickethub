@@ -8,26 +8,43 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class EventFilterDto implements Serializable {
+public class EventSummaryDto implements Serializable {
+
+
     @Serial
     private static final long serialVersionUID = 3632325812900502352L;
-    private String title;
-    private Integer city;
-    private Integer category;
-    private Long organizer;
-    private Boolean online;
-    //    private Boolean free;
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
-    private LocalDateTime startOn;
-    private LocalDateTime endOn;
 
+    private long id;
+
+    private String title;
+
+
+    private String city;
+
+    private long cityId;
+
+
+    private String organizer;
+
+    private long organizerId;
+
+
+    private String organizerImage;
+
+
+    private boolean free;
+
+    private boolean online;
+
+    private boolean active;
+
+    private BigDecimal price;
+
+    private long categoryId;
 
 }

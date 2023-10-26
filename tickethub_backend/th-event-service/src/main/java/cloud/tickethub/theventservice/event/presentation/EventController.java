@@ -3,6 +3,7 @@ package cloud.tickethub.theventservice.event.presentation;
 
 import cloud.tickethub.theventservice.event.domain.EventDto;
 import cloud.tickethub.theventservice.event.domain.EventFilterDto;
+import cloud.tickethub.theventservice.event.domain.EventSummaryDto;
 import cloud.tickethub.theventservice.event.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,14 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<EventDto> getEventById(@PathVariable long id) {
         return new ResponseEntity<>(eventService.getEvent(id), HttpStatus.OK);
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<EventDto>> searchEvent(@RequestBody @Valid EventFilterDto dto) {
+    public ResponseEntity<List<EventSummaryDto>> searchEvent(@RequestBody @Valid EventFilterDto dto) {
         return new ResponseEntity<>(eventService.findAll(dto), HttpStatus.OK);
     }
 

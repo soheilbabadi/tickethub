@@ -1,18 +1,12 @@
 package cloud.tickethub.theventservice.event.service;
 
-import cloud.tickethub.theventservice.event.domain.Category;
-import cloud.tickethub.theventservice.event.domain.Event;
-import cloud.tickethub.theventservice.event.domain.EventDto;
-import cloud.tickethub.theventservice.event.domain.EventFilterDto;
+import cloud.tickethub.theventservice.event.domain.*;
 import cloud.tickethub.theventservice.event.infra.CategoryRepo;
 import cloud.tickethub.theventservice.event.infra.EventRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -27,17 +21,21 @@ public class EventServiceImpl implements EventService {
     private CategoryRepo categoryRepo;
 
     @Override
-    @Cacheable(value = "events", key = "#dto", unless = "#result.size() == 0", condition = "#dto != null", sync = true)
-    public List<EventDto> findAll(EventFilterDto dto) {
+    public List<EventSummaryDto> findAll(EventFilterDto dto) {
         return convertToDto(findAllByFilter(dto));
     }
 
 
     @Override
     public EventDto addEvent(EventDto dto) {
-        Event event = new Event();
+
+
+        validate(dto);
+
+        var event = new Event();
         BeanUtils.copyProperties(dto, event);
         event.setCategory(getCategoryById(dto.getCategoryId()));
+
         event.setRegisterOn(LocalDateTime.now(ZoneId.of("UTC")));
         event.setUpdateOn(LocalDateTime.now(ZoneId.of("UTC")));
 
@@ -48,6 +46,11 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEvent(EventDto dto) {
+
+
+        validate(dto);
+
+
         var event = eventRepo.findById(dto.getId()).orElseThrow(() -> new RuntimeException("Event not found"));
         BeanUtils.copyProperties(dto, event);
         event.setCategory(getCategoryById(dto.getCategoryId()));
@@ -57,7 +60,6 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    @Cacheable(value = "events", key = "#id")
     public EventDto getEvent(long id) {
         var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         var dto = new EventDto();
@@ -68,7 +70,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    @CacheEvict(value = "events", allEntries = true)
+
     public void deleteEvent(long id) {
         var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         eventRepo.delete(event);
@@ -92,6 +94,7 @@ public class EventServiceImpl implements EventService {
 
     private List<Event> findAllByFilter(EventFilterDto dto) {
 
+
         List<Event> list = eventRepo.findAll();
 
         if (dto.getTitle() != null)
@@ -106,8 +109,11 @@ public class EventServiceImpl implements EventService {
         if (dto.getOrganizer() != null)
             list = list.stream().filter(event -> event.getOrganizerId() == dto.getOrganizer()).toList();
 
-        if (dto.getOnline())
-            list = list.stream().filter(Event::isOnline).toList();
+        if (dto.getOnline()) {
+            list = list.stream().filter(event -> event.isOnline()).toList();
+        } else {
+            list = list.stream().filter(event -> !event.isOnline()).toList();
+        }
 
         if (dto.getMaxPrice() != null && dto.getMinPrice() != null)
             list = list.stream().filter(event -> event.getPrice().compareTo(dto.getMinPrice()) >= 0 && event.getPrice().compareTo(dto.getMaxPrice()) <= 0).toList();
@@ -118,18 +124,18 @@ public class EventServiceImpl implements EventService {
         if (dto.getEndOn() != null)
             list = list.stream().filter(event -> event.getEndOn().isBefore(dto.getEndOn())).toList();
 
-        if (dto.getFree())
-            list = list.stream().filter(event -> event.getPrice().compareTo(BigDecimal.ZERO) == 0).toList();
 
         return list;
     }
 
-    private List<EventDto> convertToDto(List<Event> eventList) {
+    private List<EventSummaryDto> convertToDto(List<Event> eventList) {
         return eventList.stream().map(event -> {
-            var dto = new EventDto();
+            var dto = new EventSummaryDto();
             BeanUtils.copyProperties(event, dto);
-            dto.setCategory(event.getCategory().getTitle());
+
             dto.setCategoryId(event.getCategory().getId());
+
+
             return dto;
         }).toList();
     }
@@ -137,5 +143,26 @@ public class EventServiceImpl implements EventService {
 
     private Category getCategoryById(long id) {
         return categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+    }
+
+    private void validate(EventDto dto) {
+
+        if (dto.isOnline()) {
+            dto.setCityId(0);
+            dto.setAddress("");
+            dto.setLatitude(0);
+            dto.setLongitude(0);
+            dto.setCity("آنلاین");
+        }
+
+        if (dto.getEndOn().isBefore(dto.getStartOn()))
+            throw new RuntimeException("End date must be after start date");
+
+        if (dto.getRegisterEndOn().isBefore(dto.getRegisterStartOn()))
+            throw new RuntimeException("Register end date must be after register start date");
+
+        if (dto.getRegisterEndOn().isAfter(dto.getStartOn()))
+            throw new RuntimeException("Register end date must be before start date");
+
     }
 }

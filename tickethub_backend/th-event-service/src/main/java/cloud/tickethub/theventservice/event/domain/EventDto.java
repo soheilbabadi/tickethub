@@ -18,7 +18,7 @@ public class EventDto implements Serializable {
 
 
     @Serial
-    private static final long serialVersionUID = 2835174747968614937L;
+    private static final long serialVersionUID = -4101476875571981510L;
 
     private long id;
 
