@@ -20,13 +20,12 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     @Column(unique = true, nullable = false, length = 50, columnDefinition = "VARCHAR(50)")
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
-
 
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, targetEntity = Event.class, fetch = FetchType.EAGER)

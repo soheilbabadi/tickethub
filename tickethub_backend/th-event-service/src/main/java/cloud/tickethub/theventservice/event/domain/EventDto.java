@@ -41,6 +41,10 @@ public class EventDto implements Serializable {
     private double longitude;
     private LocalDateTime startOn;
     private LocalDateTime endOn;
+    private LocalDateTime registerStartOn;
+    private LocalDateTime registerEndOn;
+    private LocalDateTime registerOn;
+    private LocalDateTime updateOn;
 
 
     private String banner;
@@ -77,7 +81,7 @@ public class EventDto implements Serializable {
 
     private String category;
 
-    private int categoryId;
+    private long categoryId;
 
 
 }

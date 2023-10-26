@@ -34,7 +34,7 @@ public class EventPhotoServiceImpl implements EventPhotoService {
 
 
     @Override
-    public EventPhotoDto getImage(String id) throws Exception {
+    public EventPhotoDto getImage(String id) {
         var dto = new EventPhotoDto();
         var picture = eventPhotoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
@@ -75,7 +75,7 @@ public class EventPhotoServiceImpl implements EventPhotoService {
     }
 
     @Override
-    public void deleteImage(String id) throws Exception {
+    public void deleteImage(String id) {
 
         eventPhotoRepo.deleteById(id);
     }
@@ -83,7 +83,7 @@ public class EventPhotoServiceImpl implements EventPhotoService {
     private byte[] thumbnail(MultipartFile file) throws IOException {
         int newWidth = 200;
 
-        BufferedImage originalImage = file.getBytes().length == 0 ? ImageIO.read(file.getInputStream()) : ImageIO.read(file.getInputStream());
+        BufferedImage originalImage = ImageIO.read(file.getInputStream());
         int height = originalImage.getHeight();
         int width = originalImage.getWidth();
         int newHeight = (int) (height * ((float) newWidth / (float) width));
@@ -93,8 +93,7 @@ public class EventPhotoServiceImpl implements EventPhotoService {
 
         ByteArrayOutputStream bass = new ByteArrayOutputStream();
         ImageIO.write(resizedImage, "jpg", bass);
-        byte[] bytes = bass.toByteArray();
-        return bytes;
+        return bass.toByteArray();
 
     }
 }

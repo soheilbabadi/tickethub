@@ -40,7 +40,6 @@ public class Event implements Serializable {
     private long cityId;
 
 
-
     @Column(nullable = false)
     private int capacity;
 
@@ -51,6 +50,11 @@ public class Event implements Serializable {
     private double longitude;
     private LocalDateTime startOn;
     private LocalDateTime endOn;
+
+    private LocalDateTime registerStartOn;
+    private LocalDateTime registerEndOn;
+    private LocalDateTime registerOn;
+    private LocalDateTime updateOn;
 
 
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50)")
