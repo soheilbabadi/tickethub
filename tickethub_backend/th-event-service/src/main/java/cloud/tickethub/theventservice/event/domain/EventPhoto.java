@@ -22,6 +22,7 @@ public class EventPhoto implements Serializable {
     private static final long serialVersionUID = -747711197555455354L;
 
     @Id
+    @GeneratedValue(generator = "uuid")
     private String id;
 
     private byte[] fileContent;
@@ -47,7 +48,6 @@ public class EventPhoto implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Event.class)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
-
 
 
 }
