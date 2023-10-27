@@ -1,5 +1,6 @@
 package cloud.tickethub.theventservice.event.domain;
 
+import cloud.tickethub.theventservice.event.dto.AlbumPhoto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

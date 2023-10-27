@@ -2,8 +2,8 @@ package cloud.tickethub.theventservice.event.service;
 
 import cloud.tickethub.theventservice.event.domain.Event;
 import cloud.tickethub.theventservice.event.domain.EventPhoto;
-import cloud.tickethub.theventservice.event.domain.EventPhotoDto;
-import cloud.tickethub.theventservice.event.domain.EventPhotoPostDto;
+import cloud.tickethub.theventservice.event.dto.EventPhotoDto;
+import cloud.tickethub.theventservice.event.dto.EventPhotoPostDto;
 import cloud.tickethub.theventservice.event.infra.EventPhotoRepo;
 import cloud.tickethub.theventservice.event.infra.EventRepo;
 import org.springframework.beans.BeanUtils;

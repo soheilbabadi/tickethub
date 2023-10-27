@@ -14,4 +14,5 @@ public interface EventRepo extends JpaRepository<Event, Long> {
 
     List<Event> findAllByOrganizerIdOrderByStartOnDesc(long organizerId);
 
+
 }

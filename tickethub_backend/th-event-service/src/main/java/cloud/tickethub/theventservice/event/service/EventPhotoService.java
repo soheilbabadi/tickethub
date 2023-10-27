@@ -1,7 +1,7 @@
 package cloud.tickethub.theventservice.event.service;
 
-import cloud.tickethub.theventservice.event.domain.EventPhotoDto;
-import cloud.tickethub.theventservice.event.domain.EventPhotoPostDto;
+import cloud.tickethub.theventservice.event.dto.EventPhotoDto;
+import cloud.tickethub.theventservice.event.dto.EventPhotoPostDto;
 
 public interface EventPhotoService {
     EventPhotoDto getImage(String id) throws Exception;

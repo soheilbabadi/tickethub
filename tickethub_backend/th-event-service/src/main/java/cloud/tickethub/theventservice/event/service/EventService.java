@@ -1,8 +1,8 @@
 package cloud.tickethub.theventservice.event.service;
 
-import cloud.tickethub.theventservice.event.domain.EventDto;
-import cloud.tickethub.theventservice.event.domain.EventFilterDto;
-import cloud.tickethub.theventservice.event.domain.EventSummaryDto;
+import cloud.tickethub.theventservice.event.dto.EventDto;
+import cloud.tickethub.theventservice.event.dto.EventFilterDto;
+import cloud.tickethub.theventservice.event.dto.EventSummaryDto;
 
 import java.util.List;
 

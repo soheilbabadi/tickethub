@@ -10,7 +10,7 @@
     </parent>
     <groupId>cloud.tickethub</groupId>
     <artifactId>th-event-service</artifactId>
-    <version>0.0.1 1-SNAPSHOT
+    <version>1.0.1-SNAPSHOT
     </version>
     <name>th-event-service</name>
     <description>Demo project for Spring Boot</description>

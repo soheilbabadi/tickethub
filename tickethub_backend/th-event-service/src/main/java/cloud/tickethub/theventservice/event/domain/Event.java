@@ -10,6 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -53,6 +54,8 @@ public class Event implements Serializable {
 
     private LocalDateTime registerStartOn;
     private LocalDateTime registerEndOn;
+
+
     private LocalDateTime registerOn;
     private LocalDateTime updateOn;
 
@@ -114,5 +117,8 @@ public class Event implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = EventPhoto.class)
     private EventPhoto eventPhoto;
+
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = EventChangeLog.class, cascade = CascadeType.ALL, mappedBy = "event")
+    private List<EventChangeLog> eventChangeLogs;
 
 }

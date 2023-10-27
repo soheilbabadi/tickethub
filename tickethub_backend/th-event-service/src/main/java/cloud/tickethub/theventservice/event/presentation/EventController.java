@@ -1,9 +1,9 @@
 package cloud.tickethub.theventservice.event.presentation;
 
 
-import cloud.tickethub.theventservice.event.domain.EventDto;
-import cloud.tickethub.theventservice.event.domain.EventFilterDto;
-import cloud.tickethub.theventservice.event.domain.EventSummaryDto;
+import cloud.tickethub.theventservice.event.dto.EventDto;
+import cloud.tickethub.theventservice.event.dto.EventFilterDto;
+import cloud.tickethub.theventservice.event.dto.EventSummaryDto;
 import cloud.tickethub.theventservice.event.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,10 @@
 package cloud.tickethub.theventservice.event.service;
 
-import cloud.tickethub.theventservice.event.domain.*;
+import cloud.tickethub.theventservice.event.domain.Category;
+import cloud.tickethub.theventservice.event.domain.Event;
+import cloud.tickethub.theventservice.event.dto.EventDto;
+import cloud.tickethub.theventservice.event.dto.EventFilterDto;
+import cloud.tickethub.theventservice.event.dto.EventSummaryDto;
 import cloud.tickethub.theventservice.event.infra.CategoryRepo;
 import cloud.tickethub.theventservice.event.infra.EventRepo;
 import org.springframework.beans.BeanUtils;

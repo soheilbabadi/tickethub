@@ -1,4 +1,4 @@
-package cloud.tickethub.theventservice.event.domain;
+package cloud.tickethub.theventservice.event.dto;
 
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
