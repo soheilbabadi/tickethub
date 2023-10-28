@@ -19,6 +19,9 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     @Autowired
+    CacheManager cacheManager;
+
+    @Autowired
     private EventRepo eventRepo;
 
     @Autowired
@@ -31,6 +34,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
+    @CachePut(value ="event-cache",key = "#dto.id")
     public EventDto addEvent(EventDto dto) {
 
 
@@ -64,6 +68,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
+    @Cacheable(value = "event-cache")
     public EventDto getEvent(long id) {
         var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         var dto = new EventDto();
@@ -74,7 +79,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-
+    @CacheEvict(value = "event-cache", allEntries = true)
     public void deleteEvent(long id) {
         var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         eventRepo.delete(event);
