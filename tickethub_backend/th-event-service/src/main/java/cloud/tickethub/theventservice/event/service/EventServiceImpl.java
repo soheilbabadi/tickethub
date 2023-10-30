@@ -9,6 +9,7 @@ import cloud.tickethub.theventservice.event.infra.CategoryRepo;
 import cloud.tickethub.theventservice.event.infra.EventRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,28 +33,22 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto addEvent(EventDto dto) {
-
-
         validate(dto);
 
         var event = new Event();
         BeanUtils.copyProperties(dto, event);
         event.setCategory(getCategoryById(dto.getCategoryId()));
-
         event.setRegisterOn(LocalDateTime.now(ZoneId.of("UTC")));
         event.setUpdateOn(LocalDateTime.now(ZoneId.of("UTC")));
-
         eventRepo.save(event);
+
         dto.setId(event.getId());
         return dto;
     }
 
     @Override
     public EventDto updateEvent(EventDto dto) {
-
-
         validate(dto);
-
 
         var event = eventRepo.findById(dto.getId()).orElseThrow(() -> new RuntimeException("Event not found"));
         BeanUtils.copyProperties(dto, event);
@@ -64,6 +59,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
+    @CachePut(value = "event", key = "#id")
     public EventDto getEvent(long id) {
         var event = eventRepo.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         var dto = new EventDto();
